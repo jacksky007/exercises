@@ -1,3 +1,5 @@
+'use strict'
+
 var async = {}
 
 async.sequence = function(tasks) {
