@@ -1,7 +1,6 @@
 'use strict'
 
-module.exports = curry
-function curry(f) {
+module.exports = function(f) {
   function _curry(f, argsCount, params) {
     var context = this
     if (params.length >= argsCount) {
@@ -10,7 +9,7 @@ function curry(f) {
     return function() {
       return _curry.call(
           context,
-          f.bind.apply(f, [context].concat(params)),
+          f.bind.apply(f, [this || context].concat(params)),
           argsCount - params.length,
           [].slice.call(arguments)
       )
