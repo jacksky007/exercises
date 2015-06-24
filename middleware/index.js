@@ -5,7 +5,11 @@ function Middleware() {
   if (!this instanceof Middleware) {
     return new Middleware
   }
+  this._init()
+}
+Middleware.prototype._init = function() {
   this._queue = []
+  this._go = null
 }
 Middleware.prototype.use = function(cb) {
   var me = this
@@ -24,8 +28,7 @@ Middleware.prototype.go = function(cb) {
   var me = this
   me._go = function() {
     cb.call(me, arguments)
-    me._queue = []
-    me._go = null
+    me._init()
   }
 }
 
