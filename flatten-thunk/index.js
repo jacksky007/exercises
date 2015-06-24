@@ -1,7 +1,6 @@
 'use strict'
 
-module.exports = flattenThunk
-function flattenThunk(thunk) {
+module.exports = function(thunk) {
   return function(cb) {
     (function f() {
       thunk.call(null, function(err, result) {
