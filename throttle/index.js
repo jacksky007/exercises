@@ -3,21 +3,22 @@
 module.exports = function(f, time) {
   var lastCalledAt
   var timeout
+  var context
+  var args
   return function() {
-    var me = this
-    var args = [].slice.call(arguments)
-    if (timeout || (new Date) - lastCalledAt < time) {
-      clearTimeout(timeout)
+    context = this
+    args = [].slice.call(arguments)
+    if (!lastCalledAt || ((new Date) - lastCalledAt > time && !timeout)) {
+      lastCalledAt = new Date
+      return f.apply(context, args)
+    }
+    if (!timeout) {
       timeout = setTimeout(function() {
         lastCalledAt = new Date
-        f.apply(me, args)
-      }, time - ((new Date) - lastCalledAt))
+        f.apply(context, args)
+        timeout = null
+      }, time)
       return
-    }
-    if (!lastCalledAt || (new Date) - lastCalledAt > time) {
-      lastCalledAt = new Date
-      clearTimeout(timeout)
-      return f.apply(me, args)
     }
   }
 }
